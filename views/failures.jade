@@ -1,0 +1,19 @@
+//Created by Araja Jyothi Babu on 04-Oct-16.
+extends layout
+
+block content
+    .placeholder-100
+    .contianer-fluid
+        .row
+            .col-md-3.col-sm-2
+            .col-md-6.col-sm-8
+                h3 Most probable reasons for failure in downloading video:
+                br
+                ul.list-group
+                    each key, value in failureReasons
+                        li.list-group-item
+                            i(class=value)
+                            span &nbsp;#{ " " + key }
+                h4.pull-right For any queries feel free to&nbsp;
+                    a(href="/contact") Contact Us.
+            .col-md-3.col-sm-2

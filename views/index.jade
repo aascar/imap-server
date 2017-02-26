@@ -1,0 +1,40 @@
+extends layout
+block vars
+    - var showSearch = true;
+block content
+    .contianer-fluid
+        .placeholder-50
+        .row
+            .col-md-2
+                ul.nav.nav-pills.nav-stacked.side-links
+                    li(role="presentation")
+                        a(href="/repeated")
+                            i.fa.fa-repeat.text-primary
+                            span  Most Repeated
+                    li(role="presentation")
+                        a(href="/downloaded")
+                            i.fa.fa-download.text-primary
+                            span Most Downloaded
+            .col-md-7
+                .trending-container
+                    ul.trending-list-inline
+                        each item, index in videos
+                            li.trending-item
+                                a(href="#{ '/watch?v=' + item._id}")
+                                    img.media-object.trending-image(src=item.img alt=item.title)
+                                    h6.trending-title(title=item.title) #{item.title}
+                                    ul.nav.video-attributes
+                                        li(role="presentation")
+                                            h6.media-heading
+                                                span(title="Likes") #{item.likes || 0}&nbsp;
+                                                i.fa.fa-heart-o.text-danger
+                                        li(role="presentation")
+                                            h6.media-heading
+                                                span(title="Repeats") #{item.repeats || 0}&nbsp;
+                                                i.fa.fa-repeat.text-success
+                                        li(role="presentation")
+                                            h6.media-heading
+                                                span(title="Downloads") #{item.downloads || 0}&nbsp;
+                                                i.fa.fa-download.text-info
+
+            .col-md-3

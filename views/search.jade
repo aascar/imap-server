@@ -1,0 +1,36 @@
+//
+   Created by jyothi on 22/1/17.
+extends layout
+
+block vars
+    - var showSearch = true;
+
+block content
+    .placeholder-50
+    .contianer-fluid
+        .row
+            .col-md-2
+                ul.nav.nav-pills.nav-stacked.side-links
+                    li(role="presentation")
+                        a(href="/repeated")
+                            i.fa.fa-repeat.text-primary
+                            span  Most Repeated
+                    li(role="presentation")
+                        a
+                            i.fa.fa-download.text-primary
+                            span Most Downloaded
+            .col-md-7
+                .media-listd
+                    each item, index in list
+                        li.media.media-item
+                            a(href="#{ '/watch?v=' + item._id}")
+                                .media-left
+                                    img.media-object.media-image(src=item.img alt=item.title)
+                                .media-body
+                                    h4.media-heading #{item.title}
+                                    strong.text-success.channel-name  #{item.channel}
+                                    p.text-justify #{item.description}
+                if(!list || list.length < 1)
+                    h3.text-center
+                        span.media-heading No results found. Try again..!
+            .col-md-3

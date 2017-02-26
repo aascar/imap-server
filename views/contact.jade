@@ -1,0 +1,32 @@
+//Created by Araja Jyothi Babu on 04-Oct-16.
+extends layout
+
+block content
+    .placeholder-50
+    .contianer-fluid
+        .row
+            .col-md-3.col-sm-2
+            .col-md-6.col-sm-8
+                .placeholder-50
+                .alert.alert-warning.alert-dismissible.text-center.hide#message(role="alert")
+                    button.close(type="button", data-dismiss="alert", aria-label="Close")
+                        span(aria-hidden="true") &times;
+                h2.media-heading(align='center') Contact Us
+                br
+                form.contact-form#contact-form
+                    .row
+                        .col-md-6.col-sm-6
+                            .form-group
+                                input.form-control#form-name(required="required", placeholder="Your Name", name="name", type="text", pattern="[A-Za-z ]*.{3,}" title="Please give your name.")
+                        .col-md-6.col-sm-6
+                            .form-group
+                                input.form-control#form-email(required="required", placeholder="Your Email", type="email", name="email", pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$")
+                    .row
+                        .col-md-12
+                            .form-group
+                                textarea.form-control#form-content(style="height:100px", required="required", placeholder="Write something for us. (If Any)", name="content")
+                                input#form-url(type="hidden", value=url)
+                            .form-group
+                                input.form-control.btn-info#form-submit(type="submit", value="Submit")
+
+            .col-md-3.col-sm-2

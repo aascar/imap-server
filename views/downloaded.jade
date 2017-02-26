@@ -1,0 +1,48 @@
+//
+   Created by Araja Jyothi Babu on 14-Nov-16.
+extends layout
+
+block vars
+    - var showSearch = true;
+
+block content
+    .placeholder-50
+    .contianer-fluid
+        .row
+            .col-md-2
+                ul.nav.nav-pills.nav-stacked.side-links
+                    li(role="presentation")
+                        a(href="/repeated")
+                            i.fa.fa-repeat.text-primary
+                            span  Most Repeated
+                    li.active(role="presentation")
+                        a
+                            i.fa.fa-download.text-primary
+                            span Most Downloaded
+            .col-md-7
+                h3.text-center.no-padding.no-margin
+                    span.media-heading Most Downloaded Videos.
+                hr
+                .media-listd
+                    each item, index in list
+                        li.media.media-item
+                            a(href="#{ '/watch?v=' + item._id}")
+                                .media-left
+                                    img.media-object.media-image(src=item.img alt=item.title)
+                                .media-body
+                                    h4.media-heading #{item.title}
+                                    br
+                                    ul.nav.video-attributes
+                                        li(role="presentation")
+                                            h4.media-heading
+                                                span(title="Likes") #{item.likes || 0}&nbsp;
+                                                i.fa.fa-heart-o.text-danger
+                                        li(role="presentation")
+                                            h4.media-heading
+                                                span(title="Repeats") #{item.repeats || 0}&nbsp;
+                                                i.fa.fa-repeat.text-success
+                                        li(role="presentation")
+                                            h4.media-heading
+                                                span(title="Downloads") #{item.downloads || 0}&nbsp;
+                                                i.fa.fa-download.text-info
+                .col-md-3

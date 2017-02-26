@@ -1,0 +1,132 @@
+extends layout
+
+block vars
+    - var showSearch = true;
+
+block content
+    script.
+        var ip = "Nothing";
+        var nextVideoId = null;
+        $.get("https://ipinfo.io", function (response) { ip = response.ip}, "jsonp");
+        function replaceIP(url){return url.replace(/&ip=(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/g, "&ip=" + ip);}
+        function downloadURI(uri, name, id){ var link = document.createElement("a");document.body.appendChild(link);link.download = name;link.href = replaceIP(uri);link.click();document.body.removeChild(link); updateDownloads(id);}//window.location.assign(replaceIP(uri));}
+    .placeholder-50
+    .contianer-fluid
+        .row
+            .col-md-2
+                ul.nav.nav-pills.nav-stacked.side-links
+                    li(role="presentation")
+                        a(href="/repeated")
+                            i.fa.fa-repeat.text-primary
+                            span  Most Repeated
+                    li(role="presentation")
+                        a(href="/downloaded")
+                            i.fa.fa-download.text-primary
+                            span Most Downloaded
+                .placeholder-50
+            .col-md-7
+                .video-container
+                    div#player
+                hr
+            .col-md-3.video-data-holder
+                br
+                .row.text-center
+                    .col-md-4.col-xs-4.col-sm-4
+                        h3.media-heading(title="Coming soon..!", data-toggle="tooltip")
+                            span#video-likes(title="Likes") #{video.likes || 0}
+                            span &nbsp;
+                            i.fa.fa-heart-o.text-danger
+                    .col-md-4.col-xs-4.col-sm-4
+                        h3.media-heading
+                            span#video-repeats(title="Repeats") #{video.repeats || 0}
+                            span &nbsp;
+                            i.fa.fa-repeat.text-success
+                    .col-md-4.col-xs-4.col-sm-4
+                        h3.media-heading
+                            span#video-downloads(title="Downloads") #{video.downloads || 0}
+                            span &nbsp;
+                            i.fa.fa-download.text-info
+                hr.no-padding.margin-basic
+                .row.text-center
+                    .col-md-6.col-xs-6.col-sm-6
+                        .flipswitch
+                            input(type="checkbox" name="flipswitch" class="flipswitch-cb" id="fs")
+                            label.flipswitch-label(for="fs")
+                                .flipswitch-inner
+                                .flipswitch-switch
+                    .col-md-2.col-xs-2.col-sm-2
+                    .col-md-4.col-xs-4.col-sm-4
+                        .fb-share-button('data-href'= "https://www.uryoutube.com/watch?v=" + info.id, 'data-layout'="button" 'data-size'="large")
+                            a.fb-xfbml-parse-ignore(target="_blank", href="https://www.facebook.com/sharer/sharer.php?u=" + "https://www.uryoutube.com/watch?v=" + info.id + "&amp;src=sdkpreparse") Share
+                hr.no-padding.margin-basic
+                .download-container
+                    button.btn-primary.form-control.download-collapse(data-toggle="collapse" data-target="#download") Download
+                        i.fa.fa-angle-down.pull-right
+                    .collapse(id="download")
+                        if Object.keys(info).length > 0
+                            .list-group.custom-group
+                                each item, index in info.formats
+                                    li.list-group-item
+                                        a.btn.btn-success.download-button-left(title = item.title, itag = item.itag, video_id = info.id, video_name = info.title + "." + item.container) #{item.resolution} #{item.container}&nbsp;
+                                            i.fa.fa-download
+                                        a.btn.btn-info.pull-right.download-button(title ="Alternative Link", onclick='downloadURI("#{item.url}", "#{info.title + "." + item.container}", "#{info.id}")' itag = item.itag, video_id = info.id, video_name = info.title + "." + item.container)
+                                            i.fa.fa-download
+                        else
+                            .alert.alert-warning.alert-dismissible.text-center(role="alert") Regrets..! This video cannot be downloaded.!
+                                button.close(type="button", data-dismiss="alert", aria-label="Close")
+                                    span(aria-hidden="true") &times;
+                            br
+                            h5 One or More of the following reasons:
+                            ul.list-group.text-small
+                                each key, value in failureReasons
+                                    li.list-group-item
+                                        i(class=value)
+                                        span &nbsp;#{ " " + key }
+                            h6.pull-right Don't hesitate to&nbsp;
+                                a(href= "/contact?url=" + url)  Report Us.
+
+        .row
+            .col-md-2
+            .col-md-7
+                .trending-container
+                    ul.trending-list-inline
+                        each item, index in videos
+                            li.trending-item(id='#{item._id}')
+                                a(href="#{ '/watch?v=' + item._id}")
+                                    img.media-object.trending-image(src=item.img, alt=item.title, style="width: 100%")
+                                    h6.trending-title(title=item.title) #{item.title}
+                                    h6.text-success.channel-name  #{item.channel}
+            .col-md-3
+        script.
+            var videoId, nextVideoId;
+            videoId = '#{video._id}';
+            var tag = document.createElement('script');
+            tag.src = "https://www.youtube.com/iframe_api";
+            var firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+            var player;
+            function onYouTubeIframeAPIReady() {
+                player = new YT.Player('player', {
+                    playerVars: {
+                        autoplay: 1
+                    },
+                    //height: '100%',
+                    width: '100%',
+                    videoId: videoId,
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange
+                    }
+                });
+            }
+            function onPlayerReady(event) {
+                event.target.playVideo();
+            }
+            function onPlayerStateChange(event) {
+                if (event.data == YT.PlayerState.ENDED) {
+                    managePlay(player, videoId, nextVideoId);
+                }
+            }
+            function stopVideo() {
+                player.stopVideo();
+            }

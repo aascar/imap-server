@@ -1,0 +1,18 @@
+extends layout
+
+block content
+    .row
+        .col-md-6
+            img.img-responsive.error-image(src="/images/404.png")
+        .col-md-4
+            .placeholder-50
+            h1.error-message(align="center")= message
+            h2.error-status(align="center")= error.status
+            h3.error-redirect(align="center")
+                i.fa.fa-info-circle
+                span &nbsp;meanwhile visit&nbsp;
+                    a(href="/") Home Page
+
+        .col-md-2
+    if(error.stack)
+        pre #{error.stack}
