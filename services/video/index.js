@@ -3,8 +3,8 @@
  */
 var VideoService = {};
 
-VideoService = function (db) {
-    this.db = db;
+VideoService = function (collection) {
+    this.collection = collection;
 };
 
 /**
@@ -118,7 +118,7 @@ VideoService.prototype.relatedVideos = function (videoId, success, failure) {
 };
 
 /**
- * search db for videos based on query string
+ * search collection for videos based on query string
  * @param key {string}
  * @param success {function}
  * @param failure {function}
@@ -127,6 +127,6 @@ VideoService.prototype.searchVideos = function (key, success, failure) {
     //TODO:
 };
 
-module.exports = function (db) {
-    return new VideoService(db);
+module.exports = function (collection) {
+    return new VideoService(collection);
 };

@@ -3,8 +3,8 @@
  */
 var UserService = {};
 
-UserService = function (db) {
-    this.db = db;
+UserService = function (collection) {
+    this.collection = collection;
 };
 
 UserService.prototype.login = function (user) {
@@ -52,6 +52,6 @@ UserService.prototype.deletePlaylist = function (userId, playlistName) {
     //TODO:
 };
 
-module.exports = function(db){
-    return new UserService(db);
+module.exports = function(collection){
+    return new UserService(collection);
 };

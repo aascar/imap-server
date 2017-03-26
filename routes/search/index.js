@@ -1,6 +1,7 @@
 /**
  * Created by jyothi on 24/3/17.
  */
+
 module.exports = function (router, searchService) {
     router.get("", function (req, res) {
         var query = req.query.q;
